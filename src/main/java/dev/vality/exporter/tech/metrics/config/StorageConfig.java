@@ -10,22 +10,12 @@ import java.util.concurrent.ConcurrentHashMap;
 public class StorageConfig {
 
     @Bean
-    public Map<String, Double> paymentApiHttpCodeCountMap() {
+    public Map<String, Double> apiHttpCodeCountMap() {
         return new ConcurrentHashMap<>();
     }
 
     @Bean
-    public Map<String, Double> paymentMachinesFailedCountMap() {
-        return new ConcurrentHashMap<>();
-    }
-
-    @Bean
-    public Map<String, Double> payoutApiHttpCodeCountMap() {
-        return new ConcurrentHashMap<>();
-    }
-
-    @Bean
-    public Map<String, Double> payoutMachinesFailedCountMap() {
+    public Map<String, Double> machinesFailedCountMap() {
         return new ConcurrentHashMap<>();
     }
 }

@@ -54,7 +54,7 @@ exporter-limits:
   cron: '*/30 * * * * *' #every 30 seconds
 
 interval:
-  time: 60 #seconds
+  time: 30 #seconds
 
 opensearch:
   username: changeit

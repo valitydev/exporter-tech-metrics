@@ -15,12 +15,11 @@ public class TechMetricsService {
     private final MeterRegistryService meterRegistryService;
     private final OpenSearchService openSearchService;
     private final ObjectMapper objectMapper;
-    private final Map<String, Double> paymentApiHttpCodeCountMap;
-    private final Map<String, Double> paymentMachinesFailedCountMap;
-    private final Map<String, Double> payoutApiHttpCodeCountMap;
-    private final Map<String, Double> payoutMachinesFailedCountMap;
+    private final Map<String, Double> apiHttpCodeCountMap;
+    private final Map<String, Double> machinesFailedCountMap;
 
     public void registerMetrics() {
+        var httpCodeCountMetrics = openSearchService.getCapiHttpCode();
 
     }
 }
