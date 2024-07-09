@@ -9,31 +9,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class HttpCodeDto {
+public class MachinesFailedData {
     private String id;
     private String index;
     private String scope;
     private String type;
     private String timestamp;
-    private String version;
-    private String bodyBytesSent;
-    private String httpHost;
-    private String httpReferrer;
-    private String httpUserAgent;
-    private String httpXForwardedFor;
-    private String httpXRequestId;
+    private String deadline;
+    private String errorClass;
+    private String errorReason;
+    private String errorStackTrace;
     private String kubernetesContainerHash;
     private String kubernetesContainerImage;
     private String kubernetesContainerName;
     private String kubernetesHost;
     private String kubernetesNamespaceName;
-    private String requestLength;
-    private String requestMethod;
-    private String requestTime;
-    private String status;
+    private String mgPulseEventId;
+    private String otelSpanId;
+    private String otelTraceFlags;
+    private String parentId;
+    private String pid;
+    private String spanId;
     private String stream;
-    private String tlsCipher;
-    private String tlsProtocol;
-    private String traceUrl;
-    private String upstreamCacheStatus;
 }

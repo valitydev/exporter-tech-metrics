@@ -1,7 +1,8 @@
 package dev.vality.exporter.tech.metrics.service;
 
 import dev.vality.exporter.tech.metrics.config.OpenSearchProperties;
-import dev.vality.exporter.tech.metrics.model.HttpCodeDto;
+import dev.vality.exporter.tech.metrics.model.HttpCodeData;
+import dev.vality.exporter.tech.metrics.model.MachinesFailedData;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +41,11 @@ public class OpenSearchService {
     private static final String WALLET = "wallet";
     private static final String PRIVDOC = "privdoc";
     private static final String PAYRES = "payres";
+    private static final String MACHINEGUN = "machinegun";
+    private static final String SEVERITY = "@severity";
+    private static final String ERROR = "error";
+    private static final String MESSAGE = "message";
+    private static final String MACHINE_FAILED = "machine failed";
 
     private final OpenSearchProperties openSearchProperties;
     private final OpenSearchClient openSearchClient;
@@ -48,7 +54,7 @@ public class OpenSearchService {
     private String intervalTime;
 
     @SneakyThrows
-    public List<HttpCodeDto> getCapiHttpCode() {
+    public List<HttpCodeData> getCapiHttpCodeData() {
         return openSearchClient.search(s -> s
                                 .size(10000)
                                 .index(openSearchProperties.getIndex())
@@ -102,7 +108,7 @@ public class OpenSearchService {
                                                                         ._toQuery())
                                                                 .build()
                                                                 ._toQuery()))),
-                        HttpCodeDto.class)
+                        HttpCodeData.class)
                 .hits()
                 .hits()
                 .stream()
@@ -111,7 +117,7 @@ public class OpenSearchService {
     }
 
     @SneakyThrows
-    public List<HttpCodeDto> getWapiHttpCode() {
+    public List<HttpCodeData> getWapiHttpCodeData() {
         return openSearchClient.search(s -> s
                                 .size(10000)
                                 .index(openSearchProperties.getIndex())
@@ -177,7 +183,7 @@ public class OpenSearchService {
                                                                         ._toQuery())
                                                                 .build()
                                                                 ._toQuery()))),
-                        HttpCodeDto.class)
+                        HttpCodeData.class)
                 .hits()
                 .hits()
                 .stream()
@@ -185,5 +191,48 @@ public class OpenSearchService {
                 .collect(Collectors.toList());
     }
 
-
+    @SneakyThrows
+    public List<MachinesFailedData> getMachinesFailedData() {
+        return openSearchClient.search(s -> s
+                                .size(10000)
+                                .index(openSearchProperties.getIndex())
+                                .sort(builder -> builder
+                                        .field(builder1 -> builder1
+                                                .field(TIMESTAMP)
+                                                .order(SortOrder.Desc)
+                                                .unmappedType(FieldType.Boolean)))
+                                .docvalueFields(builder -> builder
+                                        .field(TIMESTAMP)
+                                        .format(DATE_TIME))
+                                .query(builder -> builder
+                                        .bool(builder1 -> builder1
+                                                .filter(new RangeQuery.Builder()
+                                                                .field(TIMESTAMP)
+                                                                .gte(JsonData.of(
+                                                                        String.format("now-%ss", intervalTime)))
+                                                                .format(STRICT_DATE_OPTIONAL_TIME)
+                                                                .build()
+                                                                ._toQuery(),
+                                                        new BoolQuery.Builder()
+                                                                .should(new Query(new MatchPhraseQuery.Builder()
+                                                                                .field(SERVICE)
+                                                                                .query(MACHINEGUN)
+                                                                                .build()),
+                                                                        new Query(new MatchPhraseQuery.Builder()
+                                                                                .field(SEVERITY)
+                                                                                .query(ERROR)
+                                                                                .build()),
+                                                                        new Query(new MatchPhraseQuery.Builder()
+                                                                                .field(MESSAGE)
+                                                                                .query(MACHINE_FAILED)
+                                                                                .build()))
+                                                                .build()
+                                                                ._toQuery()))),
+                        MachinesFailedData.class)
+                .hits()
+                .hits()
+                .stream()
+                .map(Hit::source)
+                .collect(Collectors.toList());
+    }
 }
