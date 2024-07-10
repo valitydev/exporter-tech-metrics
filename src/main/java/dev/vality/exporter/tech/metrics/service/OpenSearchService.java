@@ -30,8 +30,6 @@ public class OpenSearchService {
     private static final String TIMESTAMP = "@timestamp";
     private static final String DATE_TIME = "date_time";
     private static final String STRICT_DATE_OPTIONAL_TIME = "strict_date_optional_time";
-    private static final String HTTP_HOST = "http_host";
-    private static final String API_EMPAYRE_COM = "api.empayre.com";
     private static final String STATUS = "status";
     private static final String SERVICE = "service";
     private static final String INGRESS_CONTROLLER = "ingress-controller";
@@ -47,6 +45,8 @@ public class OpenSearchService {
     private static final String ERROR = "error";
     private static final String MESSAGE = "message";
     private static final String MACHINE_FAILED = "machine failed";
+    private static final String STATUS_START = "100";
+    private static final String STATUS_END = "599";
 
     private final OpenSearchProperties openSearchProperties;
     private final OpenSearchClient openSearchClient;
@@ -87,8 +87,8 @@ public class OpenSearchService {
                                                                                 .build()),
                                                                         new RangeQuery.Builder()
                                                                                 .field(STATUS)
-                                                                                .gte(JsonData.of("500"))
-                                                                                .lte(JsonData.of("599"))
+                                                                                .gte(JsonData.of(STATUS_START))
+                                                                                .lte(JsonData.of(STATUS_END))
                                                                                 .build()
                                                                                 ._toQuery())
                                                                 .mustNot(new BoolQuery.Builder()
@@ -142,8 +142,8 @@ public class OpenSearchService {
                                                                                 .build()),
                                                                         new RangeQuery.Builder()
                                                                                 .field(STATUS)
-                                                                                .gte(JsonData.of("500"))
-                                                                                .lte(JsonData.of("599"))
+                                                                                .gte(JsonData.of(STATUS_START))
+                                                                                .lte(JsonData.of(STATUS_END))
                                                                                 .build()
                                                                                 ._toQuery(),
                                                                         new BoolQuery.Builder()
