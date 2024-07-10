@@ -18,7 +18,11 @@ public class CustomTag {
     public static Tag apiType(String apiType) {
         return Tag.of(API_TYPE_TAG, apiType);
     }
-    public static Tag httpCode(String httpCode) {return Tag.of(HTTP_CODE_TAG, httpCode);}
+
+    public static Tag httpCode(String httpCode) {
+        return Tag.of(HTTP_CODE_TAG, httpCode);
+    }
+
     public static Tag url(String url) {
         return Tag.of(URL_TAG, url);
     }
@@ -26,13 +30,17 @@ public class CustomTag {
     public static Tag machineType(String machineType) {
         return Tag.of(MACHINE_TYPE_TAG, machineType);
     }
+
     public static Tag providerId(String providerId) {
         return Tag.of(PROVIDER_ID_TAG, providerId);
     }
+
     public static Tag providerName(String providerName) {
         return Tag.of(PROVIDER_NAME_TAG, providerName);
     }
+
     public static Tag currencyId(String currencyId) {
         return Tag.of(CURRENCY_ID_TAG, currencyId);
     }
+
 }
