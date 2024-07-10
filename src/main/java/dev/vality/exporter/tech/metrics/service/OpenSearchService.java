@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@SuppressWarnings("LineLength")
 public class OpenSearchService {
 
     private static final String TIMESTAMP = "@timestamp";
@@ -81,16 +82,12 @@ public class OpenSearchService {
                                                                                 .query(INGRESS_CONTROLLER)
                                                                                 .build()),
                                                                         new Query(new MatchPhraseQuery.Builder()
-                                                                                .field(HTTP_HOST)
-                                                                                .query(API_EMPAYRE_COM)
-                                                                                .build()),
-                                                                        new Query(new MatchPhraseQuery.Builder()
                                                                                 .field(REQUEST)
                                                                                 .query(V2)
                                                                                 .build()),
                                                                         new RangeQuery.Builder()
                                                                                 .field(STATUS)
-                                                                                .gte(JsonData.of("100"))
+                                                                                .gte(JsonData.of("500"))
                                                                                 .lte(JsonData.of("599"))
                                                                                 .build()
                                                                                 ._toQuery())
@@ -143,13 +140,9 @@ public class OpenSearchService {
                                                                                 .field(SERVICE)
                                                                                 .query(INGRESS_CONTROLLER)
                                                                                 .build()),
-                                                                        new Query(new MatchPhraseQuery.Builder()
-                                                                                .field(HTTP_HOST)
-                                                                                .query(API_EMPAYRE_COM)
-                                                                                .build()),
                                                                         new RangeQuery.Builder()
                                                                                 .field(STATUS)
-                                                                                .gte(JsonData.of("100"))
+                                                                                .gte(JsonData.of("500"))
                                                                                 .lte(JsonData.of("599"))
                                                                                 .build()
                                                                                 ._toQuery(),
