@@ -13,8 +13,8 @@ public class ApiHttpCodesService {
 
     public void registerMetrics() {
         var capiHttpCodeData = openSearchService.getCapiHttpCodeData();
-        log.info("capiHttpCodeData {}", capiHttpCodeData);
+        log.info("capiHttpCodeData size {}", capiHttpCodeData.size());
         var wapiHttpCodeData = openSearchService.getWapiHttpCodeData();
-        log.info("wapiHttpCodeData {}", wapiHttpCodeData);
+        log.info("wapiHttpCodeData size {}", wapiHttpCodeData.size());
     }
 }

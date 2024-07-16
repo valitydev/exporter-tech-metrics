@@ -13,6 +13,6 @@ public class MachinesFailedService {
 
     public void registerMetrics() {
         var machinesFailedData = openSearchService.getMachinesFailedData();
-        log.info("machinesFailedData {}", machinesFailedData);
+        log.info("machinesFailedData size {}", machinesFailedData.size());
     }
 }
