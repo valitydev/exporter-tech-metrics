@@ -50,11 +50,10 @@ spring:
     username: postgres
     password: postgres
 
-#TODO physical_naming_strategy
-#hibernate:
-#  physical_naming_strategy: dev.vality.exporter.limits.entity.naming.SnakeCaseNamingStrategy
+hibernate:
+  physical_naming_strategy: dev.vality.exporter.tech.metrics.entity.SnakeCaseNamingStrategy
 
-exporter-limits:
+exporter-tech-metrics:
   cron: '*/30 * * * * *' #every 30 seconds
 
 interval:
