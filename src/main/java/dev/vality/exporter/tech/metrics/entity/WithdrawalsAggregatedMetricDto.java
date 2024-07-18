@@ -8,16 +8,24 @@ import lombok.Data;
 @NamedNativeQuery(
         name = "getWithdrawalsMetrics",
         query = """
-                 select
-                  w.withdrawal_id as withdrawalId, 
-                  w.provider_id as providerId,
-                  p.name as providerName,
-                  w.currency_code as currencyCode
-                from
-                  dw.withdrawal as w
-                  inner join dw.provider as p on w.provider_id = p.provider_ref_id
-                where
-                  w.withdrawal_id in :withdrawalIds
+                   with w1 as (
+                       select
+                         w.withdrawal_id, 
+                         coalesce(w.provider_id, -1) as provider_id,
+                         w.currency_code 
+                       from
+                         dw.withdrawal as w 
+                       where w.withdrawal_id in :withdrawalIds 
+                       and provider_id not in (1)
+                       and w.current
+                   )
+                   select 
+                       w1.*, 
+                       p.name as provider_name 
+                   from
+                       w1
+                       inner join dw.provider as p on w1.provider_id = p.provider_ref_id
+                       and p.current;
                 """,
         resultSetMapping = "WithdrawalsAggregatedMetricDtoList")
 @SqlResultSetMapping(

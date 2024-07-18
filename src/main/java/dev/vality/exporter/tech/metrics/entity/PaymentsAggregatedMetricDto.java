@@ -8,17 +8,26 @@ import lombok.Data;
 @NamedNativeQuery(
         name = "getPaymentsStatusMetrics",
         query = """
+                with p1 as (
+                    select
+                      pm.invoice_id,
+                      coalesce(pr.route_provider_id, -1) as provider_id, 
+                      pm.currency_code
+                    from
+                      dw.payment as pm
+                      inner join dw.payment_route as pr on pm.invoice_id = pr.invoice_id
+                      and pr.route_provider_id not in (1)
+                      and pr.current
+                    where
+                      pm.invoice_id in :invoiceIds
+                )
                 select
-                  pm.invoice_id as invoiceId, 
-                  pr.route_provider_id as providerId,
-                  p.name as providerName,
-                  pm.currency_code as currencyCode
+                  p1.*,
+                  p.name as provider_name
                 from
-                  dw.payment as pm
-                  inner join dw.payment_route as pr on pm.invoice_id = pr.invoice_id
-                  inner join dw.provider as p on pr.route_provider_id = p.provider_ref_id
-                where
-                  pm.invoice_id = in :invoiceIds
+                  p1
+                  inner join dw.provider as p on p1.provider_id = p.provider_ref_id
+                  and p.current
                 """,
         resultSetMapping = "PaymentsAggregatedMetricDtoList")
 @SqlResultSetMapping(
