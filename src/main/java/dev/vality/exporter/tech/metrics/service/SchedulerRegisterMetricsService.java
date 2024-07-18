@@ -12,7 +12,7 @@ public class SchedulerRegisterMetricsService {
 
     private final MetricsService metricsService;
 
-    @Scheduled(cron = "${exporter-limits.cron:-}")
+    @Scheduled(cron = "${exporter-tech-metrics.cron:-}")
     public void registerMetricsTask() {
         log.debug("Start of registration of limits in prometheus");
         metricsService.registerMetrics();
