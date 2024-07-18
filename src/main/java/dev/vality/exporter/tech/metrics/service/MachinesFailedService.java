@@ -25,6 +25,7 @@ public class MachinesFailedService {
         var withdrawalIds = machinesFailedData.stream()
                 .filter(w -> w.getMachineNs().contains(WITHDRAWAL))
                 .map(MachinesFailedData::getMachineId)
+                .limit(10)
                 .toList();
         var withdrawalEntities = withdrawalRepository.getWithdrawalsMetrics(withdrawalIds);
         log.info("withdrawalEntities {}", withdrawalEntities);
@@ -32,6 +33,7 @@ public class MachinesFailedService {
         var invoiceIds = machinesFailedData.stream()
                 .filter(w -> w.getMachineNs().contains(INVOICE))
                 .map(MachinesFailedData::getMachineId)
+                .limit(10)
                 .toList();
         var invoiceEntities = paymentRepository.getPaymentsStatusMetrics(invoiceIds);
         log.info("invoiceEntities {}", invoiceEntities);
