@@ -47,6 +47,11 @@ public class OpenSearchService {
     private static final String MACHINE_FAILED = "machine failed";
     private static final String STATUS_START = "100";
     private static final String STATUS_END = "599";
+    private static final String CONTEXT_AUTH_EXPIRATION = "context.auth.expiration";
+    private static final String CONTEXT_ENV_NOW = "context.env.now";
+    private static final String DEADLINE = "deadline";
+    private static final String RESCHEDULE_TIME = "reschedule_time";
+    private static final String TARGET_TIMESTAMP = "target_timestamp";
 
     private final OpenSearchProperties openSearchProperties;
     private final OpenSearchClient openSearchClient;
@@ -187,7 +192,7 @@ public class OpenSearchService {
     @SneakyThrows
     public List<MachinesFailedData> getMachinesFailedData() {
         return openSearchClient.search(s -> s
-                                .size(10000)
+                                .size(500)
                                 .index(openSearchProperties.getIndex())
                                 .sort(builder -> builder
                                         .field(builder1 -> builder1
@@ -195,8 +200,12 @@ public class OpenSearchService {
                                                 .order(SortOrder.Desc)
                                                 .unmappedType(FieldType.Boolean)))
                                 .docvalueFields(builder -> builder
-                                        .field(TIMESTAMP)
-                                        .format(DATE_TIME))
+                                        .field(TIMESTAMP).format(DATE_TIME)
+                                        .field(CONTEXT_AUTH_EXPIRATION).format(DATE_TIME)
+                                        .field(CONTEXT_ENV_NOW).format(DATE_TIME)
+                                        .field(DEADLINE).format(DATE_TIME)
+                                        .field(RESCHEDULE_TIME).format(DATE_TIME)
+                                        .field(TARGET_TIMESTAMP).format(DATE_TIME))
                                 .query(builder -> builder
                                         .bool(builder1 -> builder1
                                                 .filter(new RangeQuery.Builder()
@@ -207,7 +216,7 @@ public class OpenSearchService {
                                                                 .build()
                                                                 ._toQuery(),
                                                         new BoolQuery.Builder()
-                                                                .should(new Query(new MatchPhraseQuery.Builder()
+                                                                .filter(new Query(new MatchPhraseQuery.Builder()
                                                                                 .field(SERVICE)
                                                                                 .query(MACHINEGUN)
                                                                                 .build()),
