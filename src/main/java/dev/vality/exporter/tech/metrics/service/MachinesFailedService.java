@@ -27,6 +27,7 @@ public class MachinesFailedService {
                 .map(MachinesFailedData::getMachineId)
                 .limit(10)
                 .toList();
+        log.info("withdrawalIds {}", withdrawalIds);
         var withdrawalEntities = withdrawalRepository.getWithdrawalsMetrics(withdrawalIds);
         log.info("withdrawalEntities {}", withdrawalEntities);
 
@@ -35,6 +36,7 @@ public class MachinesFailedService {
                 .map(MachinesFailedData::getMachineId)
                 .limit(10)
                 .toList();
+        log.info("invoiceIds {}", invoiceIds);
         var invoiceEntities = paymentRepository.getPaymentsStatusMetrics(invoiceIds);
         log.info("invoiceEntities {}", invoiceEntities);
     }
