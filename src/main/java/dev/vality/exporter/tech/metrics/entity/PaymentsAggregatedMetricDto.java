@@ -10,9 +10,9 @@ import lombok.Data;
         query = """
                 with p1 as (
                     select
-                      pm.invoice_id,
-                      coalesce(pr.route_provider_id, -1) as provider_id, 
-                      pm.currency_code
+                      pm.invoice_id as invoiceId,
+                      coalesce(pr.route_provider_id, -1) as providerId, 
+                      pm.currency_code as currencyCode 
                     from
                       dw.payment as pm
                       inner join dw.payment_route as pr on pm.invoice_id = pr.invoice_id
@@ -23,10 +23,10 @@ import lombok.Data;
                 )
                 select
                   p1.*,
-                  p.name as provider_name
+                  p.name as providerName
                 from
                   p1
-                  inner join dw.provider as p on p1.provider_id = p.provider_ref_id
+                  inner join dw.provider as p on p1.providerId = p.provider_ref_id
                   and p.current
                 """,
         resultSetMapping = "PaymentsAggregatedMetricDtoList")
