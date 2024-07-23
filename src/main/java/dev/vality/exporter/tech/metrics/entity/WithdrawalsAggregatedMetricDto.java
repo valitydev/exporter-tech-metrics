@@ -10,9 +10,9 @@ import lombok.Data;
         query = """
                    with w1 as (
                        select
-                         w.withdrawal_id, 
-                         coalesce(w.provider_id, -1) as provider_id,
-                         w.currency_code 
+                         w.withdrawal_id as withdrawalId, 
+                         coalesce(w.provider_id, -1) as providerId,
+                         w.currency_code as currencyCode 
                        from
                          dw.withdrawal as w 
                        where w.withdrawal_id in :withdrawalIds 
@@ -21,10 +21,10 @@ import lombok.Data;
                    )
                    select 
                        w1.*, 
-                       p.name as provider_name 
+                       p.name as providerName 
                    from
                        w1
-                       inner join dw.provider as p on w1.provider_id = p.provider_ref_id
+                       inner join dw.provider as p on w1.providerId = p.provider_ref_id
                        and p.current;
                 """,
         resultSetMapping = "WithdrawalsAggregatedMetricDtoList")
