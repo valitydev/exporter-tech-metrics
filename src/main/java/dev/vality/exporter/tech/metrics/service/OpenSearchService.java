@@ -80,7 +80,7 @@ public class OpenSearchService {
                                                                         String.format("now-%ss", intervalTime)))
                                                                 .format(STRICT_DATE_OPTIONAL_TIME)
                                                                 .build()
-                                                                ._toQuery(),
+                                                                .toQuery(),
                                                         new BoolQuery.Builder()
                                                                 .should(new Query(new MatchPhraseQuery.Builder()
                                                                                 .field(SERVICE)
@@ -95,7 +95,7 @@ public class OpenSearchService {
                                                                                 .gte(JsonData.of(STATUS_START))
                                                                                 .lte(JsonData.of(STATUS_END))
                                                                                 .build()
-                                                                                ._toQuery())
+                                                                                .toQuery())
                                                                 .mustNot(new BoolQuery.Builder()
                                                                         .minimumShouldMatch("1")
                                                                         .should(new Query(new MatchPhraseQuery.Builder()
@@ -107,9 +107,9 @@ public class OpenSearchService {
                                                                                         .query(ANALYTICS)
                                                                                         .build()))
                                                                         .build()
-                                                                        ._toQuery())
+                                                                        .toQuery())
                                                                 .build()
-                                                                ._toQuery()))),
+                                                                .toQuery()))),
                         HttpCodeData.class)
                 .hits()
                 .hits()
@@ -139,7 +139,7 @@ public class OpenSearchService {
                                                                         String.format("now-%ss", intervalTime)))
                                                                 .format(STRICT_DATE_OPTIONAL_TIME)
                                                                 .build()
-                                                                ._toQuery(),
+                                                                .toQuery(),
                                                         new BoolQuery.Builder()
                                                                 .should(new Query(new MatchPhraseQuery.Builder()
                                                                                 .field(SERVICE)
@@ -150,7 +150,7 @@ public class OpenSearchService {
                                                                                 .gte(JsonData.of(STATUS_START))
                                                                                 .lte(JsonData.of(STATUS_END))
                                                                                 .build()
-                                                                                ._toQuery(),
+                                                                                .toQuery(),
                                                                         new BoolQuery.Builder()
                                                                                 .minimumShouldMatch("1")
                                                                                 .should(new Query(new MatchPhraseQuery.Builder()
@@ -166,7 +166,7 @@ public class OpenSearchService {
                                                                                                 .query(PAYRES)
                                                                                                 .build()))
                                                                                 .build()
-                                                                                ._toQuery())
+                                                                                .toQuery())
                                                                 .mustNot(new BoolQuery.Builder()
                                                                         .minimumShouldMatch("1")
                                                                         .should(new Query(new MatchPhraseQuery.Builder()
@@ -178,9 +178,9 @@ public class OpenSearchService {
                                                                                         .query(ANALYTICS)
                                                                                         .build()))
                                                                         .build()
-                                                                        ._toQuery())
+                                                                        .toQuery())
                                                                 .build()
-                                                                ._toQuery()))),
+                                                                .toQuery()))),
                         HttpCodeData.class)
                 .hits()
                 .hits()
@@ -214,22 +214,22 @@ public class OpenSearchService {
                                                                 .gte(JsonData.of(String.format("now-%ss", intervalTime)))
                                                                 .format(STRICT_DATE_OPTIONAL_TIME)
                                                                 .build()
-                                                                ._toQuery(),
+                                                                .toQuery(),
                                                         new MatchPhraseQuery.Builder()
                                                                 .field(SERVICE)
                                                                 .query(MACHINEGUN)
                                                                 .build()
-                                                                ._toQuery(),
+                                                                .toQuery(),
                                                         new MatchPhraseQuery.Builder()
                                                                 .field(SEVERITY)
                                                                 .query(ERROR)
                                                                 .build()
-                                                                ._toQuery(),
+                                                                .toQuery(),
                                                         new MatchPhraseQuery.Builder()
                                                                 .field(MESSAGE)
                                                                 .query(MACHINE_FAILED)
                                                                 .build()
-                                                                ._toQuery()
+                                                                .toQuery()
                                                 )
                                         )
                                 ),
