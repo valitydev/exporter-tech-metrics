@@ -33,7 +33,7 @@ public class MachinesFailedService {
 
     public void registerMetrics() {
         var machinesFailedData = openSearchService.getMachinesFailedData();
-        log.info("machinesFailedData {}", machinesFailedData);
+        log.info("machinesFailedData size {}", machinesFailedData.size());
 
         if (machinesFailedData.isEmpty()) {
             return;
@@ -59,8 +59,11 @@ public class MachinesFailedService {
                 break;
             }
 
-            gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT, getWithdrawalMetricId(withdrawalData),
-                    getWithdrawalTags(withdrawalData));
+            gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT,
+                    getMetricId(WITHDRAWAL, withdrawalData.getProviderId(), withdrawalData.getProviderName(),
+                            withdrawalData.getCurrencyCode()),
+                    getTags(WITHDRAWAL, withdrawalData.getProviderId(), withdrawalData.getProviderName(),
+                            withdrawalData.getCurrencyCode()));
         }
 
         var invoiceIds = machinesFailedData.stream()
@@ -82,9 +85,18 @@ public class MachinesFailedService {
                 log.warn("invoiceDto null, no gauge invoiceData {}", invoiceData);
             }
 
-            gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT, getInvoiceMetricId(invoiceData),
-                    getInvoiceTags(invoiceData));
+            gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT,
+                    getMetricId(INVOICE, invoiceData.getProviderId(), invoiceData.getProviderName(),
+                            invoiceData.getCurrencyCode()),
+                    getTags(INVOICE, invoiceData.getProviderId(), invoiceData.getProviderName(),
+                            invoiceData.getCurrencyCode()));
         }
+
+        var registeredMetricsSize =
+                meterRegistryService.getRegisteredMetricsSize(Metric.MACHINES_FAILED_COUNT.getName());
+        log.info("Limits metrics have been registered to 'prometheus', " +
+                "registeredMetricsSize = {}, machinesFailedDataSize = {}",
+                registeredMetricsSize, machinesFailedData.size());
     }
 
     private void gauge(Map<String, Double> storage, Metric metric, String id, Tags tags) {
@@ -98,37 +110,20 @@ public class MachinesFailedService {
 
     }
 
-    private Tags getWithdrawalTags(WithdrawalsAggregatedMetricDto withdrawalData) {
+    private Tags getTags(String machineType, String providerId, String providerName, String currencyCode) {
         return Tags.of(
-                Tag.of("machine_type", withdrawalData.getWithdrawalId()),
-                Tag.of("provider_id", withdrawalData.getProviderId()),
-                Tag.of("provider_name", withdrawalData.getProviderName()),
-                Tag.of("currency_id", withdrawalData.getCurrencyCode())
+                Tag.of("machine_type", machineType),
+                Tag.of("provider_id", providerId),
+                Tag.of("provider_name", providerName),
+                Tag.of("currency_id", currencyCode)
         );
     }
 
-    private Tags getInvoiceTags(PaymentsAggregatedMetricDto paymentData) {
-        return Tags.of(
-                Tag.of("machine_type", paymentData.getInvoiceId()),
-                Tag.of("provider_id", paymentData.getProviderId()),
-                Tag.of("provider_name", paymentData.getProviderName()),
-                Tag.of("currency_id", paymentData.getCurrencyCode())
-        );
-    }
-
-    private String getWithdrawalMetricId (WithdrawalsAggregatedMetricDto withdrawalData) {
+    private String getMetricId (String machineType, String providerId, String providerName, String currencyCode) {
         return String.format("%s:%s:%s:%s",
-                withdrawalData.getWithdrawalId(),
-                withdrawalData.getProviderId(),
-                withdrawalData.getProviderName(),
-                withdrawalData.getCurrencyCode());
-    }
-
-    private String getInvoiceMetricId (PaymentsAggregatedMetricDto paymentData) {
-        return String.format("%s:%s:%s:%s",
-                paymentData.getInvoiceId(),
-                paymentData.getProviderId(),
-                paymentData.getProviderName(),
-                paymentData.getCurrencyCode());
+                machineType,
+                providerId,
+                providerName,
+                currencyCode);
     }
 }
