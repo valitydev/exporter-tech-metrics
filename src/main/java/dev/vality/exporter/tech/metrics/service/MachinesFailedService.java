@@ -59,7 +59,7 @@ public class MachinesFailedService {
                 break;
             }
 
-            gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT,
+            meterRegistryService.gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT,
                     getMetricId(WITHDRAWAL, withdrawalData.getProviderId(), withdrawalData.getProviderName(),
                             withdrawalData.getCurrencyCode()),
                     getTags(WITHDRAWAL, withdrawalData.getProviderId(), withdrawalData.getProviderName(),
@@ -85,7 +85,7 @@ public class MachinesFailedService {
                 log.warn("invoiceDto null, no gauge invoiceData {}", invoiceData);
             }
 
-            gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT,
+            meterRegistryService.gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT,
                     getMetricId(INVOICE, invoiceData.getProviderId(), invoiceData.getProviderName(),
                             invoiceData.getCurrencyCode()),
                     getTags(INVOICE, invoiceData.getProviderId(), invoiceData.getProviderName(),
@@ -99,17 +99,6 @@ public class MachinesFailedService {
                 registeredMetricsSize, machinesFailedData.size());
     }
 
-    private void gauge(Map<String, Double> storage, Metric metric, String id, Tags tags) {
-        if (!storage.containsKey(id)) {
-            var gauge = Gauge.builder(metric.getName(), storage, map -> map.get(id))
-                    .description(metric.getDescription())
-                    .tags(tags);
-            meterRegistryService.registry(gauge);
-        }
-        storage.put(id, storage.getOrDefault(id, 0.0) + 1);
-
-    }
-
     private Tags getTags(String machineType, String providerId, String providerName, String currencyCode) {
         return Tags.of(
                 Tag.of("machine_type", machineType),
@@ -119,7 +108,7 @@ public class MachinesFailedService {
         );
     }
 
-    private String getMetricId (String machineType, String providerId, String providerName, String currencyCode) {
+    private String getMetricId(String machineType, String providerId, String providerName, String currencyCode) {
         return String.format("%s:%s:%s:%s",
                 machineType,
                 providerId,
