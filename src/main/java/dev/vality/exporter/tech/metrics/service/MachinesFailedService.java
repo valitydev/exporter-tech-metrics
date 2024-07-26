@@ -76,6 +76,15 @@ public class MachinesFailedService {
                 .collect(Collectors.toMap(PaymentsAggregatedMetricDto::getInvoiceId,
                         Function.identity()));
 
+        for (var invoiceData : invoiceEntities) {
+            var invoiceDto = invoiceAggregatedByMachineId.get(invoiceData.getInvoiceId());
+            if (invoiceDto == null) {
+                log.warn("invoiceDto null, no gauge invoiceData {}", invoiceData);
+            }
+
+            gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT, getInvoiceMetricId(invoiceData),
+                    getInvoiceTags(invoiceData));
+        }
     }
 
     private void gauge(Map<String, Double> storage, Metric metric, String id, Tags tags) {
@@ -91,10 +100,19 @@ public class MachinesFailedService {
 
     private Tags getWithdrawalTags(WithdrawalsAggregatedMetricDto withdrawalData) {
         return Tags.of(
-                Tag.of("withdrawalId", withdrawalData.getWithdrawalId()),
-                Tag.of("providerId", withdrawalData.getProviderId()),
-                Tag.of("providerName", withdrawalData.getProviderName()),
-                Tag.of("currencyCode", withdrawalData.getCurrencyCode())
+                Tag.of("machine_type", withdrawalData.getWithdrawalId()),
+                Tag.of("provider_id", withdrawalData.getProviderId()),
+                Tag.of("provider_name", withdrawalData.getProviderName()),
+                Tag.of("currency_id", withdrawalData.getCurrencyCode())
+        );
+    }
+
+    private Tags getInvoiceTags(PaymentsAggregatedMetricDto paymentData) {
+        return Tags.of(
+                Tag.of("machine_type", paymentData.getInvoiceId()),
+                Tag.of("provider_id", paymentData.getProviderId()),
+                Tag.of("provider_name", paymentData.getProviderName()),
+                Tag.of("currency_id", paymentData.getCurrencyCode())
         );
     }
 
@@ -106,4 +124,11 @@ public class MachinesFailedService {
                 withdrawalData.getCurrencyCode());
     }
 
+    private String getInvoiceMetricId (PaymentsAggregatedMetricDto paymentData) {
+        return String.format("%s:%s:%s:%s",
+                paymentData.getInvoiceId(),
+                paymentData.getProviderId(),
+                paymentData.getProviderName(),
+                paymentData.getCurrencyCode());
+    }
 }
