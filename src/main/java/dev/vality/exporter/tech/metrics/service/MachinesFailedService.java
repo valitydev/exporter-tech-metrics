@@ -59,26 +59,8 @@ public class MachinesFailedService {
                 break;
             }
 
-            String id = String.format("%s:%s:%s:%s",
-                    withdrawalData.getWithdrawalId(),
-                    withdrawalData.getProviderId(),
-                    withdrawalData.getProviderName(),
-                    withdrawalData.getCurrencyCode());
-
-            machinesFailedCountMap.put(id, machinesFailedCountMap.getOrDefault(id, 0.0) + 1);
-
-            Tags tags = Tags.of(
-                    Tag.of("withdrawalId", withdrawalData.getWithdrawalId()),
-                    Tag.of("providerId", withdrawalData.getProviderId()),
-                    Tag.of("providerName", withdrawalData.getProviderName()),
-                    Tag.of("currencyCode", withdrawalData.getCurrencyCode())
-            );
-
-            var gauge = Gauge.builder(Metric.MACHINES_FAILED_COUNT.getName(), machinesFailedCountMap, map -> map.get(id))
-                    .description(Metric.MACHINES_FAILED_COUNT.getDescription())
-                    .tags(tags);
-
-            meterRegistryService.registry(gauge);
+            gauge(machinesFailedCountMap, Metric.MACHINES_FAILED_COUNT, getWithdrawalMetricId(withdrawalData),
+                    getWithdrawalTags(withdrawalData));
         }
 
         var invoiceIds = machinesFailedData.stream()
@@ -94,6 +76,34 @@ public class MachinesFailedService {
                 .collect(Collectors.toMap(PaymentsAggregatedMetricDto::getInvoiceId,
                         Function.identity()));
 
+    }
+
+    private void gauge(Map<String, Double> storage, Metric metric, String id, Tags tags) {
+        if (!storage.containsKey(id)) {
+            var gauge = Gauge.builder(metric.getName(), storage, map -> map.get(id))
+                    .description(metric.getDescription())
+                    .tags(tags);
+            meterRegistryService.registry(gauge);
+        }
+        storage.put(id, storage.getOrDefault(id, 0.0) + 1);
+
+    }
+
+    private Tags getWithdrawalTags(WithdrawalsAggregatedMetricDto withdrawalData) {
+        return Tags.of(
+                Tag.of("withdrawalId", withdrawalData.getWithdrawalId()),
+                Tag.of("providerId", withdrawalData.getProviderId()),
+                Tag.of("providerName", withdrawalData.getProviderName()),
+                Tag.of("currencyCode", withdrawalData.getCurrencyCode())
+        );
+    }
+
+    private String getWithdrawalMetricId (WithdrawalsAggregatedMetricDto withdrawalData) {
+        return String.format("%s:%s:%s:%s",
+                withdrawalData.getWithdrawalId(),
+                withdrawalData.getProviderId(),
+                withdrawalData.getProviderName(),
+                withdrawalData.getCurrencyCode());
     }
 
 }
