@@ -16,7 +16,7 @@ public class ApiHttpCodesService {
 
     private final MeterRegistryService meterRegistryService;
     private final OpenSearchService openSearchService;
-    Map<String, Double> apiHttpCodeCountMap;
+    private final Map<String, Double> apiHttpCodeCountMap;
     private static final String CAPI = "capi";
     private static final String WAPI = "wapi";
 
