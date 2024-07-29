@@ -92,11 +92,13 @@ public class MachinesFailedService {
                             invoiceData.getCurrencyCode()));
         }
 
-        var registeredMetricsSize =
-                meterRegistryService.getRegisteredMetricsSize(Metric.MACHINES_FAILED_COUNT.getName());
-        log.info("Limits metrics have been registered to 'prometheus', " +
-                "registeredMetricsSize = {}, machinesFailedDataSize = {}",
-                registeredMetricsSize, machinesFailedData.size());
+        if (log.isDebugEnabled()) {
+            var registeredMetricsSize =
+                    meterRegistryService.getRegisteredMetricsSize(Metric.MACHINES_FAILED_COUNT.getName());
+            log.debug("Limits metrics have been registered to 'prometheus', " +
+                    "registeredMetricsSize = {}, machinesFailedDataSize = {}",
+                    registeredMetricsSize, machinesFailedData.size());
+        }
     }
 
     private Tags getTags(String machineType, String providerId, String providerName, String currencyCode) {

@@ -39,11 +39,13 @@ public class ApiHttpCodesService {
                     getTags(WAPI, wapiHttpCodeDto.getStatus(), wapiHttpCodeDto.getHttpHost()));
         }
 
-        var registeredMetricsSize =
-                meterRegistryService.getRegisteredMetricsSize(Metric.API_HTTP_CODE_COUNT.getName());
-        log.info("Limits metrics have been registered to 'prometheus', " +
-                        "registeredMetricsSize = {}, capiHttpCodeData = {}, wapiHttpCodeData = {}",
-                registeredMetricsSize, capiHttpCodeData.size(), wapiHttpCodeData.size());
+        if (log.isDebugEnabled()) {
+            var registeredMetricsSize =
+                    meterRegistryService.getRegisteredMetricsSize(Metric.API_HTTP_CODE_COUNT.getName());
+            log.debug("Limits metrics have been registered to 'prometheus', " +
+                            "registeredMetricsSize = {}, capiHttpCodeData = {}, wapiHttpCodeData = {}",
+                    registeredMetricsSize, capiHttpCodeData.size(), wapiHttpCodeData.size());
+        }
     }
 
     private Tags getTags(String apiType, String code, String url) {

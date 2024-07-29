@@ -34,7 +34,7 @@ public class OpenSearchService {
     private static final String SERVICE = "service";
     private static final String INGRESS_CONTROLLER = "ingress-controller";
     private static final String REQUEST = "request";
-    private static final String V2 = "v2";
+    private static final String V2_PROCESSING = "v2/processing";
     private static final String ANAPI = "anapi";
     private static final String ANALYTICS = "analytics";
     private static final String WALLET = "wallet";
@@ -52,6 +52,7 @@ public class OpenSearchService {
     private static final String DEADLINE = "deadline";
     private static final String RESCHEDULE_TIME = "reschedule_time";
     private static final String TARGET_TIMESTAMP = "target_timestamp";
+    public static final int RESPONSE_SIZE = 10000;
 
     private final OpenSearchProperties openSearchProperties;
     private final OpenSearchClient openSearchClient;
@@ -62,7 +63,7 @@ public class OpenSearchService {
     @SneakyThrows
     public List<HttpCodeData> getCapiHttpCodeData() {
         return openSearchClient.search(s -> s
-                                .size(10000)
+                                .size(RESPONSE_SIZE)
                                 .index(openSearchProperties.getIndex())
                                 .sort(builder -> builder
                                         .field(builder1 -> builder1
@@ -82,13 +83,13 @@ public class OpenSearchService {
                                                                 .build()
                                                                 .toQuery(),
                                                         new BoolQuery.Builder()
-                                                                .should(new Query(new MatchPhraseQuery.Builder()
+                                                                .filter(new Query(new MatchPhraseQuery.Builder()
                                                                                 .field(SERVICE)
                                                                                 .query(INGRESS_CONTROLLER)
                                                                                 .build()),
                                                                         new Query(new MatchPhraseQuery.Builder()
                                                                                 .field(REQUEST)
-                                                                                .query(V2)
+                                                                                .query(V2_PROCESSING)
                                                                                 .build()),
                                                                         new RangeQuery.Builder()
                                                                                 .field(STATUS)
@@ -96,18 +97,6 @@ public class OpenSearchService {
                                                                                 .lte(JsonData.of(STATUS_END))
                                                                                 .build()
                                                                                 .toQuery())
-                                                                .mustNot(new BoolQuery.Builder()
-                                                                        .minimumShouldMatch("1")
-                                                                        .should(new Query(new MatchPhraseQuery.Builder()
-                                                                                        .field(REQUEST)
-                                                                                        .query(ANAPI)
-                                                                                        .build()),
-                                                                                new Query(new MatchPhraseQuery.Builder()
-                                                                                        .field(REQUEST)
-                                                                                        .query(ANALYTICS)
-                                                                                        .build()))
-                                                                        .build()
-                                                                        .toQuery())
                                                                 .build()
                                                                 .toQuery()))),
                         HttpCodeData.class)
@@ -121,7 +110,7 @@ public class OpenSearchService {
     @SneakyThrows
     public List<HttpCodeData> getWapiHttpCodeData() {
         return openSearchClient.search(s -> s
-                                .size(10000)
+                                .size(RESPONSE_SIZE)
                                 .index(openSearchProperties.getIndex())
                                 .sort(builder -> builder
                                         .field(builder1 -> builder1
@@ -141,7 +130,7 @@ public class OpenSearchService {
                                                                 .build()
                                                                 .toQuery(),
                                                         new BoolQuery.Builder()
-                                                                .should(new Query(new MatchPhraseQuery.Builder()
+                                                                .filter(new Query(new MatchPhraseQuery.Builder()
                                                                                 .field(SERVICE)
                                                                                 .query(INGRESS_CONTROLLER)
                                                                                 .build()),
@@ -167,18 +156,6 @@ public class OpenSearchService {
                                                                                                 .build()))
                                                                                 .build()
                                                                                 .toQuery())
-                                                                .mustNot(new BoolQuery.Builder()
-                                                                        .minimumShouldMatch("1")
-                                                                        .should(new Query(new MatchPhraseQuery.Builder()
-                                                                                        .field(REQUEST)
-                                                                                        .query(ANAPI)
-                                                                                        .build()),
-                                                                                new Query(new MatchPhraseQuery.Builder()
-                                                                                        .field(REQUEST)
-                                                                                        .query(ANALYTICS)
-                                                                                        .build()))
-                                                                        .build()
-                                                                        .toQuery())
                                                                 .build()
                                                                 .toQuery()))),
                         HttpCodeData.class)
@@ -192,7 +169,7 @@ public class OpenSearchService {
     @SneakyThrows
     public List<MachinesFailedData> getMachinesFailedData() {
         return openSearchClient.search(s -> s
-                                .size(500)
+                                .size(RESPONSE_SIZE)
                                 .index(openSearchProperties.getIndex())
                                 .sort(builder -> builder
                                         .field(builder1 -> builder1
@@ -208,8 +185,7 @@ public class OpenSearchService {
                                         .field(TARGET_TIMESTAMP).format(DATE_TIME))
                                 .query(builder -> builder
                                         .bool(builder1 -> builder1
-                                                .filter(
-                                                        new RangeQuery.Builder()
+                                                .filter(new RangeQuery.Builder()
                                                                 .field(TIMESTAMP)
                                                                 .gte(JsonData.of(String.format("now-%ss", intervalTime)))
                                                                 .format(STRICT_DATE_OPTIONAL_TIME)
