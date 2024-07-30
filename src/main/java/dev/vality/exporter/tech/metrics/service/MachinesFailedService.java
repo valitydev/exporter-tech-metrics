@@ -42,10 +42,13 @@ public class MachinesFailedService {
         var withdrawalIds = machinesFailedData.stream()
                 .filter(w -> w.getMachineNs().contains(WITHDRAWAL))
                 .map(MachinesFailedData::getMachineId)
+                //TODO удалить логи после отладки
                 .limit(10)
                 .toList();
+        //TODO удалить логи после отладки
         log.info("withdrawalIds {}", withdrawalIds);
         var withdrawalEntities = withdrawalRepository.getWithdrawalsMetrics(withdrawalIds);
+        //TODO удалить логи после отладки
         log.info("withdrawalEntities {}", withdrawalEntities);
 
         var withdrawalAggregatedByMachineId = withdrawalEntities.stream()
@@ -69,10 +72,13 @@ public class MachinesFailedService {
         var invoiceIds = machinesFailedData.stream()
                 .filter(i -> i.getMachineNs().contains(INVOICE))
                 .map(MachinesFailedData::getMachineId)
+                //TODO удалить ограничение после отладки
                 .limit(10)
                 .toList();
+        //TODO удалить логи после отладки
         log.info("invoiceIds {}", invoiceIds);
         var invoiceEntities = paymentRepository.getPaymentsStatusMetrics(invoiceIds);
+        //TODO удалить логи после отладки
         log.info("invoiceEntities {}", invoiceEntities);
 
         var invoiceAggregatedByMachineId = invoiceEntities.stream()

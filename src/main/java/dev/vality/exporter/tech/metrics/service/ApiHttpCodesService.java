@@ -22,9 +22,11 @@ public class ApiHttpCodesService {
 
     public void registerMetrics() {
         var capiHttpCodeData = openSearchService.getCapiHttpCodeData();
+        //TODO удалить логи после отладки
         log.info("capiHttpCodeData size {}", capiHttpCodeData.size());
 
         var wapiHttpCodeData = openSearchService.getWapiHttpCodeData();
+        //TODO удалить логи после отладки
         log.info("wapiHttpCodeData size {}", wapiHttpCodeData.size());
 
         for (var capiHttpCodeDto : capiHttpCodeData) {

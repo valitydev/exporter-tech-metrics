@@ -22,8 +22,10 @@ import lombok.Data;
                       pm.invoice_id in :invoiceIds
                 )
                 select
-                  p1.*,
-                  p.name as providerName
+                  p1.invoiceId, 
+                  p1.providerId, 
+                  p.name as providerName, 
+                  p1.currencyCode
                 from
                   p1
                   inner join dw.provider as p on p1.providerId = p.provider_ref_id
@@ -35,10 +37,10 @@ import lombok.Data;
         classes = @ConstructorResult(
                 targetClass = PaymentsAggregatedMetricDto.class,
                 columns = {
+                        @ColumnResult(name = "invoiceId", type = String.class),
                         @ColumnResult(name = "providerId", type = String.class),
                         @ColumnResult(name = "providerName", type = String.class),
-                        @ColumnResult(name = "currencyCode", type = String.class),
-                        @ColumnResult(name = "invoiceId", type = String.class),}))
+                        @ColumnResult(name = "currencyCode", type = String.class),}))
 @SuppressWarnings("LineLength")
 public class PaymentsAggregatedMetricDto {
 

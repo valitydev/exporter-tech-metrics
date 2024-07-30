@@ -25,4 +25,9 @@ public class WithdrawalEntity implements Serializable {
     @Column(name = "currency_code")
     private String currencyCode;
 
+    @Column(name = "provider_id")
+    private String providerId;
+
+    @Column(name = "current")
+    private boolean current;
 }

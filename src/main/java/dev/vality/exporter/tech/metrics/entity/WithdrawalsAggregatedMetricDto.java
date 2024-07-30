@@ -20,8 +20,10 @@ import lombok.Data;
                        and w.current
                    )
                    select 
-                       w1.*, 
-                       p.name as providerName 
+                       w1.withdrawalId, 
+                       w1.providerId, 
+                       p.name as providerName, 
+                       w1.currencyCode 
                    from
                        w1
                        inner join dw.provider as p on w1.providerId = p.provider_ref_id
@@ -33,10 +35,10 @@ import lombok.Data;
         classes = @ConstructorResult(
                 targetClass = WithdrawalsAggregatedMetricDto.class,
                 columns = {
+                        @ColumnResult(name = "withdrawalId", type = String.class),
                         @ColumnResult(name = "providerId", type = String.class),
                         @ColumnResult(name = "providerName", type = String.class),
-                        @ColumnResult(name = "currencyCode", type = String.class),
-                        @ColumnResult(name = "withdrawalId", type = String.class),}))
+                        @ColumnResult(name = "currencyCode", type = String.class),}))
 @SuppressWarnings("LineLength")
 public class WithdrawalsAggregatedMetricDto {
 
