@@ -50,9 +50,6 @@ spring:
     username: postgres
     password: postgres
 
-hibernate:
-  physical_naming_strategy: dev.vality.exporter.tech.metrics.entity.SnakeCaseNamingStrategy
-
 exporter-tech-metrics:
   cron: '*/30 * * * * *' #every 30 seconds
 
@@ -66,3 +63,7 @@ opensearch:
   port: 9200
   certificate: changeit
   index: changeit
+
+logging:
+  level:
+    dev.vality.exporter.tech.metrics: DEBUG

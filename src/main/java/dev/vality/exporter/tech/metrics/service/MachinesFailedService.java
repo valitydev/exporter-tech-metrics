@@ -6,7 +6,6 @@ import dev.vality.exporter.tech.metrics.model.MachinesFailedData;
 import dev.vality.exporter.tech.metrics.model.Metric;
 import dev.vality.exporter.tech.metrics.repository.PaymentRepository;
 import dev.vality.exporter.tech.metrics.repository.WithdrawalRepository;
-import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +32,7 @@ public class MachinesFailedService {
 
     public void registerMetrics() {
         var machinesFailedData = openSearchService.getMachinesFailedData();
-        log.info("machinesFailedData size {}", machinesFailedData.size());
+        log.debug("machinesFailedData size {}", machinesFailedData.size());
 
         if (machinesFailedData.isEmpty()) {
             return;
@@ -42,11 +41,14 @@ public class MachinesFailedService {
         var withdrawalIds = machinesFailedData.stream()
                 .filter(w -> w.getMachineNs().contains(WITHDRAWAL))
                 .map(MachinesFailedData::getMachineId)
-                .limit(10)
-                .toList();
-        log.info("withdrawalIds {}", withdrawalIds);
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toList(),
+                        list -> log.isDebugEnabled()
+                                ? list.stream().limit(10).collect(Collectors.toList()) : list
+                ));
+        log.debug("withdrawalIds {}", withdrawalIds);
         var withdrawalEntities = withdrawalRepository.getWithdrawalsMetrics(withdrawalIds);
-        log.info("withdrawalEntities {}", withdrawalEntities);
+        log.debug("withdrawalEntities {}", withdrawalEntities);
 
         var withdrawalAggregatedByMachineId = withdrawalEntities.stream()
                 .collect(Collectors.toMap(WithdrawalsAggregatedMetricDto::getWithdrawalId,
@@ -69,11 +71,14 @@ public class MachinesFailedService {
         var invoiceIds = machinesFailedData.stream()
                 .filter(i -> i.getMachineNs().contains(INVOICE))
                 .map(MachinesFailedData::getMachineId)
-                .limit(10)
-                .toList();
-        log.info("invoiceIds {}", invoiceIds);
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toList(),
+                        list -> log.isDebugEnabled()
+                                ? list.stream().limit(10).collect(Collectors.toList()) : list
+                ));
+        log.debug("invoiceIds {}", invoiceIds);
         var invoiceEntities = paymentRepository.getPaymentsStatusMetrics(invoiceIds);
-        log.info("invoiceEntities {}", invoiceEntities);
+        log.debug("invoiceEntities {}", invoiceEntities);
 
         var invoiceAggregatedByMachineId = invoiceEntities.stream()
                 .collect(Collectors.toMap(PaymentsAggregatedMetricDto::getInvoiceId,
