@@ -6,7 +6,6 @@ import dev.vality.exporter.tech.metrics.model.MachinesFailedData;
 import dev.vality.exporter.tech.metrics.model.Metric;
 import dev.vality.exporter.tech.metrics.repository.PaymentRepository;
 import dev.vality.exporter.tech.metrics.repository.WithdrawalRepository;
-import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Tags;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,7 @@ public class MachinesFailedService {
         var withdrawalIds = machinesFailedData.stream()
                 .filter(w -> w.getMachineNs().contains(WITHDRAWAL))
                 .map(MachinesFailedData::getMachineId)
-                //TODO удалить логи после отладки
+                //TODO удалить ограничение после отладки
                 .limit(10)
                 .toList();
         //TODO удалить логи после отладки

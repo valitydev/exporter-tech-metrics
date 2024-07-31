@@ -19,6 +19,3 @@ spring:
   sql:
     init:
       mode: always
-
-hibernate:
-  physical_naming_strategy: dev.vality.exporter.tech.metrics.entity.SnakeCaseNamingStrategy

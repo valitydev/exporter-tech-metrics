@@ -35,8 +35,6 @@ public class OpenSearchService {
     private static final String INGRESS_CONTROLLER = "ingress-controller";
     private static final String REQUEST = "request";
     private static final String V2_PROCESSING = "v2/processing";
-    private static final String ANAPI = "anapi";
-    private static final String ANALYTICS = "analytics";
     private static final String WALLET = "wallet";
     private static final String PRIVDOC = "privdoc";
     private static final String PAYRES = "payres";
