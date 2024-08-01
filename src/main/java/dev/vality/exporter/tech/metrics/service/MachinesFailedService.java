@@ -28,6 +28,7 @@ public class MachinesFailedService {
     private final Map<String, Double> machinesFailedCountMap;
     private static final String WITHDRAWAL = "withdrawal";
     private static final String INVOICE = "invoice";
+    private static final String AFTER_SLASH = "/\\\\d+$";
 
 
     public void registerMetrics() {
@@ -41,7 +42,7 @@ public class MachinesFailedService {
         var withdrawalIds = machinesFailedData.stream()
                 .filter(w -> w.getMachineNs().contains(WITHDRAWAL))
                 .map(MachinesFailedData::getMachineId)
-                .map(id -> id.endsWith("/1") ? id.substring(0, id.length() - 2) : id)
+                .map(id -> id.replaceAll(AFTER_SLASH, ""))
                 .collect(Collectors.collectingAndThen(
                         Collectors.toList(),
                         list -> log.isDebugEnabled()
