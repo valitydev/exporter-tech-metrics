@@ -41,6 +41,7 @@ public class MachinesFailedService {
         var withdrawalIds = machinesFailedData.stream()
                 .filter(w -> w.getMachineNs().contains(WITHDRAWAL))
                 .map(MachinesFailedData::getMachineId)
+                .map(id -> id.endsWith("/1") ? id.substring(0, id.length() - 2) : id)
                 .collect(Collectors.collectingAndThen(
                         Collectors.toList(),
                         list -> log.isDebugEnabled()
