@@ -28,7 +28,7 @@ public class MachinesFailedService {
     private final Map<String, Double> machinesFailedCountMap;
     private static final String WITHDRAWAL = "withdrawal";
     private static final String INVOICE = "invoice";
-    private static final String AFTER_SLASH = "/\\\\d+$";
+    private static final String AFTER_SLASH = "/\\d+$";
 
 
     public void registerMetrics() {
