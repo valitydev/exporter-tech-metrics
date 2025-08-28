@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>exporter-tech-metrics</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>exporter-tech-metrics</name>
@@ -22,7 +22,7 @@
         <server.port>8022</server.port>
         <management.port>8023</management.port>
         <exposed.ports>${server.port} ${management.port}</exposed.ports>
-        <opensearch.version>2.12.0</opensearch.version>
+        <opensearch.version>2.19.3</opensearch.version>
     </properties>
 
     <dependencies>
@@ -72,12 +72,12 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>33.2.1-jre</version>
+            <version>33.4.8-jre</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.3</version>
+            <version>42.7.7</version>
         </dependency>
         <dependency>
             <groupId>org.opensearch.client</groupId>
@@ -135,12 +135,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-remote-resources-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.3.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.apache.maven.shared</groupId>
                         <artifactId>maven-filtering</artifactId>
-                        <version>3.3.1</version>
+                        <version>3.4.0</version>
                     </dependency>
                 </dependencies>
                 <configuration>
