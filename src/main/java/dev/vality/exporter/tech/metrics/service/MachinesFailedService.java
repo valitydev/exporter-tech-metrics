@@ -75,7 +75,7 @@ public class MachinesFailedService {
         log.debug("invoiceIds size {}, first 10 invoiceIds {}", invoiceIds.size(),
                 invoiceIds.stream().limit(10).collect(Collectors.toList()));
         var invoiceEntities = paymentRepository.getPaymentsStatusMetrics(invoiceIds);
-        log.debug("invoiceEntities size {}, first 10 invoiceEntities {}", invoiceEntities,
+        log.debug("invoiceEntities size {}, first 10 invoiceEntities {}", invoiceEntities.size(),
                 invoiceEntities.stream().limit(10).collect(Collectors.toList()));
 
         var invoiceAggregatedByMachineId = invoiceEntities.stream()
