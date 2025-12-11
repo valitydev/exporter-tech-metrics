@@ -27,11 +27,14 @@ import lombok.Data;
                   p1.providerId, 
                   p.name as providerName, 
                   p1.terminalId, 
+                  t.name as terminalName,
                   p1.currencyCode
                 from
                   p1
                   inner join dw.provider as p on p1.providerId = p.provider_ref_id
                   and p.current
+                  inner join dw.terminal as t on p1.terminalId = t.terminal_ref_id
+                  and t.current;
                 """,
         resultSetMapping = "PaymentsAggregatedMetricDtoList")
 @SqlResultSetMapping(
@@ -43,6 +46,7 @@ import lombok.Data;
                         @ColumnResult(name = "providerId", type = String.class),
                         @ColumnResult(name = "providerName", type = String.class),
                         @ColumnResult(name = "terminalId",   type = String.class),
+                        @ColumnResult(name = "terminalName", type = String.class),
                         @ColumnResult(name = "currencyCode", type = String.class),}))
 @SuppressWarnings("LineLength")
 public class PaymentsAggregatedMetricDto {
@@ -53,6 +57,7 @@ public class PaymentsAggregatedMetricDto {
     private String providerId;
     private String providerName;
     private String terminalId;
+    private String terminalName;
     private String currencyCode;
 
     public PaymentsAggregatedMetricDto(
@@ -60,12 +65,14 @@ public class PaymentsAggregatedMetricDto {
             String providerId,
             String providerName,
             String terminalId,
+            String terminalName,
             String currencyCode
     ) {
         this.invoiceId = invoiceId;
         this.providerId = providerId;
         this.providerName = providerName;
         this.terminalId = terminalId;
+        this.terminalName = terminalName;
         this.currencyCode = currencyCode;
     }
 

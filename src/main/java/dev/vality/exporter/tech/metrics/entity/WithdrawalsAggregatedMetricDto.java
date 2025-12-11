@@ -25,11 +25,14 @@ import lombok.Data;
                        w1.providerId, 
                        p.name as providerName, 
                        w1.terminalId, 
+                       t.name as terminalName,
                        w1.currencyCode 
                    from
                        w1
                        inner join dw.provider as p on w1.providerId = p.provider_ref_id
-                       and p.current;
+                       and p.current
+                       inner join dw.terminal as t on w1.terminalId = t.terminal_ref_id
+                       and t.current;
                 """,
         resultSetMapping = "WithdrawalsAggregatedMetricDtoList")
 @SqlResultSetMapping(
@@ -41,6 +44,7 @@ import lombok.Data;
                         @ColumnResult(name = "providerId", type = String.class),
                         @ColumnResult(name = "providerName", type = String.class),
                         @ColumnResult(name = "terminalId",    type = String.class),
+                        @ColumnResult(name = "terminalName", type = String.class),
                         @ColumnResult(name = "currencyCode", type = String.class),}))
 @SuppressWarnings("LineLength")
 public class WithdrawalsAggregatedMetricDto {
@@ -51,6 +55,7 @@ public class WithdrawalsAggregatedMetricDto {
     private String providerId;
     private String providerName;
     private String terminalId;
+    private String terminalName;
     private String currencyCode;
 
     public WithdrawalsAggregatedMetricDto(
@@ -58,11 +63,13 @@ public class WithdrawalsAggregatedMetricDto {
             String providerId,
             String providerName,
             String terminalId,
+            String terminalName,
             String currencyCode) {
         this.withdrawalId = withdrawalId;
         this.providerId = providerId;
         this.providerName = providerName;
         this.terminalId = terminalId;
+        this.terminalName = terminalName;
         this.currencyCode = currencyCode;
     }
 

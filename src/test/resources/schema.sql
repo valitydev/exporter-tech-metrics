@@ -2,6 +2,7 @@ CREATE SCHEMA IF NOT EXISTS dw;
 
 DROP TABLE IF EXISTS dw.withdrawal;
 DROP TABLE IF EXISTS dw.provider;
+DROP TABLE IF EXISTS dw.terminal;
 DROP TABLE IF EXISTS dw.payment;
 DROP TABLE IF EXISTS dw.payment_route;
 
@@ -20,6 +21,14 @@ CREATE TABLE IF NOT EXISTS dw.provider
 (
     id              INTEGER PRIMARY KEY,
     provider_ref_id INTEGER,
+    name            VARCHAR(255),
+    current         BOOLEAN
+);
+
+CREATE TABLE IF NOT EXISTS dw.terminal
+(
+    id              INTEGER PRIMARY KEY,
+    terminal_ref_id INTEGER,
     name            VARCHAR(255),
     current         BOOLEAN
 );
@@ -44,3 +53,7 @@ CREATE TABLE IF NOT EXISTS dw.payment_route
 );
 
 SELECT * FROM dw.provider;
+SELECT * FROM dw.terminal;
+SELECT * FROM dw.payment;
+SELECT * FROM dw.payment_route;
+SELECT * FROM dw.withdrawal;
