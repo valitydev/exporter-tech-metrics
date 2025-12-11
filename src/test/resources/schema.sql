@@ -37,6 +37,7 @@ CREATE TABLE IF NOT EXISTS dw.payment_route
 (
     id                INTEGER PRIMARY KEY,
     invoice_id        VARCHAR(255),
+    route_terminal_id INTEGER,
     route_provider_id INTEGER,
     current           BOOLEAN
 );

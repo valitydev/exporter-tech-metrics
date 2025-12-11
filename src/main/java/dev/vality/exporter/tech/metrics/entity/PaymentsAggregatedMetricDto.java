@@ -12,6 +12,7 @@ import lombok.Data;
                     select
                       pm.invoice_id as invoiceId,
                       coalesce(pr.route_provider_id, -1) as providerId, 
+                      coalesce(pr.route_terminal_id, -1) as terminalId, 
                       pm.currency_code as currencyCode 
                     from
                       dw.payment as pm
@@ -25,6 +26,7 @@ import lombok.Data;
                   p1.invoiceId, 
                   p1.providerId, 
                   p.name as providerName, 
+                  p1.terminalId, 
                   p1.currencyCode
                 from
                   p1
@@ -40,6 +42,7 @@ import lombok.Data;
                         @ColumnResult(name = "invoiceId", type = String.class),
                         @ColumnResult(name = "providerId", type = String.class),
                         @ColumnResult(name = "providerName", type = String.class),
+                        @ColumnResult(name = "terminalId",   type = String.class),
                         @ColumnResult(name = "currencyCode", type = String.class),}))
 @SuppressWarnings("LineLength")
 public class PaymentsAggregatedMetricDto {
@@ -49,12 +52,20 @@ public class PaymentsAggregatedMetricDto {
     private String invoiceId;
     private String providerId;
     private String providerName;
+    private String terminalId;
     private String currencyCode;
 
-    public PaymentsAggregatedMetricDto(String invoiceId, String providerId, String providerName, String currencyCode) {
+    public PaymentsAggregatedMetricDto(
+            String invoiceId,
+            String providerId,
+            String providerName,
+            String terminalId,
+            String currencyCode
+    ) {
         this.invoiceId = invoiceId;
         this.providerId = providerId;
         this.providerName = providerName;
+        this.terminalId = terminalId;
         this.currencyCode = currencyCode;
     }
 
