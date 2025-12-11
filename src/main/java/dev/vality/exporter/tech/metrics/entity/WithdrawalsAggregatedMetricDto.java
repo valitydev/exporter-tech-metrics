@@ -12,6 +12,7 @@ import lombok.Data;
                        select
                          w.withdrawal_id as withdrawalId, 
                          coalesce(w.provider_id, -1) as providerId,
+                         w.terminal_id as terminalId,
                          w.currency_code as currencyCode 
                        from
                          dw.withdrawal as w 
@@ -23,6 +24,7 @@ import lombok.Data;
                        w1.withdrawalId, 
                        w1.providerId, 
                        p.name as providerName, 
+                       w1.terminalId, 
                        w1.currencyCode 
                    from
                        w1
@@ -38,6 +40,7 @@ import lombok.Data;
                         @ColumnResult(name = "withdrawalId", type = String.class),
                         @ColumnResult(name = "providerId", type = String.class),
                         @ColumnResult(name = "providerName", type = String.class),
+                        @ColumnResult(name = "terminalId",    type = String.class),
                         @ColumnResult(name = "currencyCode", type = String.class),}))
 @SuppressWarnings("LineLength")
 public class WithdrawalsAggregatedMetricDto {
@@ -47,12 +50,19 @@ public class WithdrawalsAggregatedMetricDto {
     private String withdrawalId;
     private String providerId;
     private String providerName;
+    private String terminalId;
     private String currencyCode;
 
-    public WithdrawalsAggregatedMetricDto(String withdrawalId, String providerId, String providerName, String currencyCode) {
+    public WithdrawalsAggregatedMetricDto(
+            String withdrawalId,
+            String providerId,
+            String providerName,
+            String terminalId,
+            String currencyCode) {
         this.withdrawalId = withdrawalId;
         this.providerId = providerId;
         this.providerName = providerName;
+        this.terminalId = terminalId;
         this.currencyCode = currencyCode;
     }
 

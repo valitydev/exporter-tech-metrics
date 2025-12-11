@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS dw.withdrawal
     sequence_id   VARCHAR(255),
     currency_code VARCHAR(10),
     provider_id   INTEGER,
+    terminal_id   VARCHAR(255),
     current       BOOLEAN,
     PRIMARY KEY (withdrawal_id, sequence_id)
 );
