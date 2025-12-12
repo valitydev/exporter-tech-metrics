@@ -118,7 +118,7 @@ public class MachinesFailedService {
                 Tag.of("provider_id", providerId),
                 Tag.of("provider_name", providerName),
                 Tag.of("terminal_id", terminalId),
-                Tag.of("terminal_id", terminalName),
+                Tag.of("terminal_name", terminalName),
                 Tag.of("currency_name", currencyCode)
         );
     }
