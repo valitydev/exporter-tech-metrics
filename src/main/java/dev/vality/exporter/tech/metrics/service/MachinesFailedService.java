@@ -65,6 +65,7 @@ public class MachinesFailedService {
                     getMetricId(WITHDRAWAL, withdrawalData.getProviderId(), withdrawalData.getProviderName(),
                             withdrawalData.getCurrencyCode()),
                     getTags(WITHDRAWAL, withdrawalData.getProviderId(), withdrawalData.getProviderName(),
+                            withdrawalData.getTerminalId(), withdrawalData.getTerminalName(),
                             withdrawalData.getCurrencyCode()));
         }
 
@@ -92,6 +93,7 @@ public class MachinesFailedService {
                     getMetricId(INVOICE, invoiceData.getProviderId(), invoiceData.getProviderName(),
                             invoiceData.getCurrencyCode()),
                     getTags(INVOICE, invoiceData.getProviderId(), invoiceData.getProviderName(),
+                            invoiceData.getTerminalId(), invoiceData.getTerminalName(),
                             invoiceData.getCurrencyCode()));
         }
 
@@ -104,11 +106,19 @@ public class MachinesFailedService {
         }
     }
 
-    private Tags getTags(String machineType, String providerId, String providerName, String currencyCode) {
+    private Tags getTags(
+            String machineType,
+            String providerId,
+            String providerName,
+            String terminalId,
+            String terminalName,
+            String currencyCode) {
         return Tags.of(
                 Tag.of("machine_type", machineType),
                 Tag.of("provider_id", providerId),
                 Tag.of("provider_name", providerName),
+                Tag.of("terminal_id", terminalId),
+                Tag.of("terminal_name", terminalName),
                 Tag.of("currency_id", currencyCode)
         );
     }

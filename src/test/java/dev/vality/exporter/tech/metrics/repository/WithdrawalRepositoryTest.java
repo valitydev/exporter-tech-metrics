@@ -49,12 +49,16 @@ class WithdrawalRepositoryTest {
         AssertionsForClassTypes.assertThat(metric1.getWithdrawalId()).isEqualTo("w1");
         AssertionsForClassTypes.assertThat(metric1.getProviderId()).isEqualTo("1001");
         AssertionsForClassTypes.assertThat(metric1.getProviderName()).isEqualTo("Provider 1");
+        AssertionsForClassTypes.assertThat(metric1.getTerminalId()).isEqualTo("1001");
+        AssertionsForClassTypes.assertThat(metric1.getTerminalName()).isEqualTo("Terminal 1");
         AssertionsForClassTypes.assertThat(metric1.getCurrencyCode()).isEqualTo("USD");
 
         WithdrawalsAggregatedMetricDto metric2 = metrics.get(1);
         AssertionsForClassTypes.assertThat(metric2.getWithdrawalId()).isEqualTo("w2");
         AssertionsForClassTypes.assertThat(metric2.getProviderId()).isEqualTo("1002");
         AssertionsForClassTypes.assertThat(metric2.getProviderName()).isEqualTo("Provider 2");
+        AssertionsForClassTypes.assertThat(metric2.getTerminalId()).isEqualTo("1002");
+        AssertionsForClassTypes.assertThat(metric2.getTerminalName()).isEqualTo("Terminal 2");
         AssertionsForClassTypes.assertThat(metric2.getCurrencyCode()).isEqualTo("EUR");
     }
 

@@ -48,12 +48,16 @@ class PaymentRepositoryTest {
         assertThat(metric1.getInvoiceId()).isEqualTo("inv1");
         assertThat(metric1.getProviderId()).isEqualTo("1001");
         assertThat(metric1.getProviderName()).isEqualTo("Provider 1");
+        assertThat(metric1.getTerminalId()).isEqualTo("1001");
+        assertThat(metric1.getTerminalName()).isEqualTo("Terminal 1");
         assertThat(metric1.getCurrencyCode()).isEqualTo("USD");
 
         PaymentsAggregatedMetricDto metric2 = metrics.get(1);
         assertThat(metric2.getInvoiceId()).isEqualTo("inv2");
         assertThat(metric2.getProviderId()).isEqualTo("1002");
         assertThat(metric2.getProviderName()).isEqualTo("Provider 2");
+        assertThat(metric2.getTerminalId()).isEqualTo("1002");
+        assertThat(metric2.getTerminalName()).isEqualTo("Terminal 2");
         assertThat(metric2.getCurrencyCode()).isEqualTo("EUR");
     }
 }
